@@ -34,3 +34,4 @@ def minOperations(n):
 
     # Return count if var is equal to n, otherwise return 0
     return (count if var == n else 0)
+
