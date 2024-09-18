@@ -1,30 +1,43 @@
 #!/usr/bin/python3
-"""Module for determining the fewest coins needed to meet a given total amount."""
+"""
+Making Change
+"""
+
 
 def makeChange(coins, total):
     """
-    Determine the fewest number of coins needed to meet a given total amount.
-
+    Return the minimum number of coins needed to meet a given total
     Args:
-        coins (list): A list of coin denominations available.
-        total (int): The target amount to achieve using the coins.
-
-    Returns:
-        int: The fewest number of coins needed to meet the total.
-             If total is 0 or less, return 0.
-             If the total cannot be met, return -1.
+        coins (list of ints): a list of coins of different values
+        total (int): total value to be met
+    Return:
+        Number of coins or -1 if meeting the total is not possible
     """
     if total <= 0:
         return 0
+    if coins == [] or coins is None:
+        return -1
+    try:
+        n = coins.index(total)
+        return 1
+    except ValueError:
+        pass
 
-    # Array to track the minimum coins needed for each value up to total
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
-
-    # Calculate the fewest coins needed for each value from 1 to total
-    for coin in coins:
-        for i in range(coin, total + 1):
-            dp[i] = min(dp[i], dp[i - coin] + 1)
-
-    # If dp[total] is still infinity, it means the total cannot be met
-    return dp[total] if dp[total] != float('inf') else -1
+    coins.sort(reverse=True)
+    coin_count = 0
+    for i in coins:
+        if total % i == 0:
+            coin_count += int(total / i)
+            return coin_count
+        if total - i >= 0:
+            if int(total / i) > 1:
+                coin_count += int(total / i)
+                total = total % i
+            else:
+                coin_count += 1
+                total -= i
+                if total == 0:
+                    break
+    if total > 0:
+        return -1
+    return coin_count
